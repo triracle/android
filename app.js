@@ -35,9 +35,17 @@ app.post('/sendTransaction', function(req, res) {
     const from = req.body.from;
     const to = req.body.to;
     const value = req.body.value;
-    chain.createTx(from, to, value);
-    
+    const tmp = chain.createTx(from, to, value);
+    if (tmp == 1) res.send('done');
+    else res.send('sida');
 });
+
+app.get('/chainInfo', function(req, res) {
+    res.send({
+        chainInfo: chain.preHash,
+        chainLength: chain.trie.length
+    })
+})
 
 app.listen(3000);
 

@@ -16,9 +16,10 @@ class Blockchain {
         for (let i = 0; i < this.trie.length; i++) {
             tot += this.trie[i].getBalance(transaction.from);
         }
+        tot -= transaction.value;
         if (tot < 0) {
             console.log('[Error] Can not add this transaction !');
-            return;
+            return 0;
         }
         if (this.trie[this.trie.length - 1].transactions.length == 10) {
             const stringToHash = this.preHash + this.trie[this.trie.length - 1].getString();
@@ -27,6 +28,7 @@ class Blockchain {
             console.log('[Trie] new trie created');
         }
         this.trie[this.trie.length - 1].addNewTransaction(transaction);
+        return 1;
     }
 
     getLast() {
@@ -58,7 +60,7 @@ class Blockchain {
         if (this.nonce[from] == null) {
             this.nonce[from] = 0;
         }
-        this.addTransaction(new Transaction(
+        return this.addTransaction(new Transaction(
             from,
             to,
             value,
